@@ -5,15 +5,12 @@ import CryptoKit
 import BigInt
 
 
-public struct MpcProvider {
+public struct Web3SwiftMpcProvider {
     public private(set) var text = "Hello, World!"
 
     public init() {
         
     }
     
-    public func sign(transaction: EthereumTransaction) -> SignedTransaction {
-        return signtx(transaction: transaction)
-    }
-    
+
 }

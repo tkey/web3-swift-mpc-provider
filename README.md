@@ -1,3 +1,3 @@
-# mpc-signing-provider-swift
+# MpcProvider
 
 A description of this package.

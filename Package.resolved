@@ -73,12 +73,12 @@
       }
     },
     {
-      "identity" : "tkey-ios",
+      "identity" : "tkey-mpc-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tkey/tkey-ios",
+      "location" : "https://github.com/tkey/tkey-mpc-swift.git",
       "state" : {
         "branch" : "alpha",
-        "revision" : "f52ffcedfd18e9ae4899b9f23e8905be43e9344d"
+        "revision" : "9f2930b6c24703dca52c7fb19fd56a4755a954a0"
       }
     },
     {
