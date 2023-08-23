@@ -11,6 +11,7 @@ import secp256k1
 import tss_client_swift
 import CryptoKit
 import BigInt
+
 public enum CustomError: Error {
     case unknownError
     case methodUnavailable

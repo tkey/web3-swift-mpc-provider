@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Web3SwiftMpcProvider",
-    platforms: [.iOS(.v13), .macOS(.v10_15)],
+    platforms: [.iOS(.v14), .macOS(.v10_15)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -13,9 +13,8 @@ let package = Package(
             targets: ["Web3SwiftMpcProvider"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/argentlabs/web3.swift", from:"0.8.1"),
-        .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
-        .package(url: "https://github.com/torusresearch/tss-client-swift.git", branch: "fix/hash_only"),
+        .package(url: "https://github.com/argentlabs/web3.swift", from:"1.6.0"),
+        .package(url: "https://github.com/torusresearch/tss-client-swift.git", from: "1.0.10"),
         .package(url: "https://github.com/tkey/tkey-mpc-swift.git", branch: "alpha"),
     ],
     targets: [
@@ -23,7 +22,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "Web3SwiftMpcProvider",
-            dependencies: ["web3.swift", "BigInt", "tss-client-swift"],
+            dependencies: ["web3.swift", "tss-client-swift", .product(name: "ThresholdKey", package: "tkey-mpc-swift")],
             path: "Sources/Web3SwiftMpcProvider"),
         
         .testTarget(
