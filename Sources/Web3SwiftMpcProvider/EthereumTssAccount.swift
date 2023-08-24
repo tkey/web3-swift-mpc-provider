@@ -174,13 +174,13 @@ public class EthereumTssAccount: EthereumAccountProtocol {
             signed.append(last)
             return signed.web3.hexString
         }
-    
+
         /// Signing EthereumTransaction
         public func signtx(transaction: EthereumTransaction) throws -> SignedTransaction {
             guard let raw = transaction.raw else {
                throw EthereumSignerError.emptyRawTransaction
             }
-            
+
             // hash and sign data
             var signed = try self.sign(data: raw)
             // Check last char (v)
@@ -196,4 +196,3 @@ public class EthereumTssAccount: EthereumAccountProtocol {
             return SignedTransaction(transaction: transaction, signature: signed)
         }
 }
-
