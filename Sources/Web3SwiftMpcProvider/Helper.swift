@@ -5,9 +5,11 @@ import tss_client_swift
 import web3
 import secp256k1
 
-
-public func bootstrapTssClient (selected_tag: String, tssNonce: Int32, publicKey: String, tssShare: String, tssIndex: String, nodeIndexes: [Int], factorKey: String, verifier: String, verifierId: String, tssEndpoints: [String] ) throws -> (TSSClient, [String: String]) {
-    if ( publicKey.count < 128 || publicKey.count > 130 ) {
+// swiftlint:disable:next function_parameter_count
+public func bootstrapTssClient (selectedTag: String, tssNonce: Int32, publicKey: String, tssShare: String,
+                                tssIndex: String, nodeIndexes: [Int], factorKey: String, verifier: String, verifierId: String,
+                                tssEndpoints: [String] ) throws -> (TSSClient, [String: String]) {
+    if publicKey.count < 128 || publicKey.count > 130 {
         throw CustomSigningError.generalError(error: "Public Key should be in uncompressed format")
     }
     
@@ -16,7 +18,7 @@ public func bootstrapTssClient (selected_tag: String, tssNonce: Int32, publicKey
     let random = BigInt(sign: .plus, magnitude: randomKey) + BigInt(Date().timeIntervalSince1970)
     let sessionNonce = TSSHelpers.hashMessage(message: String(random))
     // create the full session string
-    let session = TSSHelpers.assembleFullSession(verifier: verifier, verifierId: verifierId, tssTag: selected_tag, tssNonce: String(tssNonce), sessionNonce: sessionNonce)
+    let session = TSSHelpers.assembleFullSession(verifier: verifier, verifierId: verifierId, tssTag: selectedTag, tssNonce: String(tssNonce), sessionNonce: sessionNonce)
 
     let userTssIndex = BigInt(tssIndex, radix: 16)!
     // total parties, including the client
@@ -32,7 +34,9 @@ public func bootstrapTssClient (selected_tag: String, tssNonce: Int32, publicKey
     let shareUnsigned = BigUInt(tssShare, radix: 16)!
     let share = BigInt(sign: .plus, magnitude: shareUnsigned)
 
-    let client = try TSSClient(session: session, index: Int32(clientIndex), parties: partyIndexes.map({Int32($0)}), endpoints: urls.map({ URL(string: $0 ?? "") }), tssSocketEndpoints: socketUrls.map({ URL(string: $0 ?? "") }), share: TSSHelpers.base64Share(share: share), pubKey: try TSSHelpers.base64PublicKey(pubKey: Data(hex: publicKey)))
+    let client = try TSSClient(session: session, index: Int32(clientIndex), parties: partyIndexes.map({Int32($0)}),
+                               endpoints: urls.map({ URL(string: $0 ?? "") }), tssSocketEndpoints: socketUrls.map({ URL(string: $0 ?? "") }),
+                               share: TSSHelpers.base64Share(share: share), pubKey: try TSSHelpers.base64PublicKey(pubKey: Data(hex: publicKey)))
 
     return (client, coeffs)
  }
