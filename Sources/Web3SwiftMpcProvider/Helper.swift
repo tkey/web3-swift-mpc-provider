@@ -12,7 +12,7 @@ public func bootstrapTssClient (selectedTag: String, tssNonce: Int32, publicKey:
     if publicKey.count < 128 || publicKey.count > 130 {
         throw CustomSigningError.generalError(error: "Public Key should be in uncompressed format")
     }
-    
+
     // generate a random nonce for sessionID
     let randomKey = BigUInt(SECP256K1.generatePrivateKey()!)
     let random = BigInt(sign: .plus, magnitude: randomKey) + BigInt(Date().timeIntervalSince1970)
@@ -33,22 +33,11 @@ public func bootstrapTssClient (selectedTag: String, tssNonce: Int32, publicKey:
 
     let shareUnsigned = BigUInt(tssShare, radix: 16)!
     let share = BigInt(sign: .plus, magnitude: shareUnsigned)
+    let denormalizeShare = try TSSHelpers.denormalizeShare(participatingServerDKGIndexes: nodeInd.map({ BigInt($0) }), userTssIndex: userTssIndex, userTssShare: share)
 
     let client = try TSSClient(session: session, index: Int32(clientIndex), parties: partyIndexes.map({Int32($0)}),
                                endpoints: urls.map({ URL(string: $0 ?? "") }), tssSocketEndpoints: socketUrls.map({ URL(string: $0 ?? "") }),
-                               share: TSSHelpers.base64Share(share: share), pubKey: try TSSHelpers.base64PublicKey(pubKey: Data(hex: publicKey)))
+                               share: TSSHelpers.base64Share(share: denormalizeShare), pubKey: try TSSHelpers.base64PublicKey(pubKey: Data(hex: publicKey)))
 
     return (client, coeffs)
  }
-
-
-
-public func hashMessage(message: Data) -> String {
-    let hash = message.sha3(.keccak256)
-    return hash.base64EncodedString()
-}
-
-public func hashMessage(message: String) -> String {
-    return hashMessage(message: Data(message.utf8))
-}
-
