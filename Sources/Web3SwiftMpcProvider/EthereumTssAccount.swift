@@ -119,7 +119,7 @@ public class EthereumTssAccount: EthereumAccountProtocol {
             return signature
         }
 
-        /// Signing utf8 encoded message String without hashing
+        /// Signing utf8 encoded message String
         public func sign(message: String) throws -> Data {
             if let data = message.data(using: .utf8) {
                 return try self.sign(data: data)
