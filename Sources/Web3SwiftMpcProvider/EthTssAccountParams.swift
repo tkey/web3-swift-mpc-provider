@@ -1,9 +1,6 @@
 public class EthTssAccountParams {
-    /// Ethereum publicKey
     public let publicKey: String
-    /// tss factorKey
     public let factorKey: String
-    /// 
     public let tssNonce: Int32
     public let tssShare: String
     public let tssIndex: String
@@ -13,7 +10,7 @@ public class EthTssAccountParams {
     public let nodeIndexes: [Int]
     public let tssEndpoints: [String]
     public let authSigs: [String]
-    // Initializer
+    // swiftlint:disable:next line_length
     public init(publicKey: String, factorKey: String, tssNonce: Int32, tssShare: String, tssIndex: String, selectedTag: String, verifier: String, verifierID: String, nodeIndexes: [Int], tssEndpoints: [String], authSigs: [String]) {
         self.publicKey = publicKey
         self.factorKey = factorKey
