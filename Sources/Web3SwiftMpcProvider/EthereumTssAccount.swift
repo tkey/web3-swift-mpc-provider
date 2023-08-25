@@ -11,7 +11,6 @@ import secp256k1
 import tss_client_swift
 import CryptoKit
 import BigInt
-import tkey_pkg
 
 public enum CustomError: Error {
     case unknownError
@@ -37,9 +36,9 @@ public class EthereumTssAccount: EthereumAccountProtocol {
     public let ethAccountParams: EthTssAccountParams
 
     required public init(params: EthTssAccountParams) throws {
-        self.ethAccountParams = params
-        
-        self.address = EthereumAddress(try KeyPoint(address: self.ethAccountParams.publicKey).getPublicKey(format: .FullAddress))
+            self.ethAccountParams = params
+            let address = KeyUtil.generateAddress(from: Data(hex: self.ethAccountParams.publicKey).suffix(64)).toChecksumAddress()
+            self.address = EthereumAddress(address)
         }
 
         /// hash and sign data

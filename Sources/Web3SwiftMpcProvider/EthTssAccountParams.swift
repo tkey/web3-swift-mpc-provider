@@ -1,6 +1,9 @@
 public class EthTssAccountParams {
+    /// Ethereum publicKey
     public let publicKey: String
+    /// tss factorKey
     public let factorKey: String
+    /// 
     public let tssNonce: Int32
     public let tssShare: String
     public let tssIndex: String
