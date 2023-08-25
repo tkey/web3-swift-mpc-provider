@@ -1,5 +1,4 @@
 public class EthTssAccountParams {
-    public let evmAddress: String
     public let publicKey: String
     public let factorKey: String
     public let tssNonce: Int32
@@ -7,16 +6,12 @@ public class EthTssAccountParams {
     public let tssIndex: String
     public let selectedTag: String
     public let verifier: String
-    
-    ///verifierID for
     public let verifierID: String
     public let nodeIndexes: [Int]
     public let tssEndpoints: [String]
     public let authSigs: [String]
-    
     // Initializer
-    public init(evmAddress: String, publicKey: String, factorKey: String, tssNonce: Int32, tssShare: String, tssIndex: String, selectedTag: String, verifier: String, verifierID: String, nodeIndexes: [Int], tssEndpoints: [String], authSigs: [String]) {
-        self.evmAddress = evmAddress
+    public init(publicKey: String, factorKey: String, tssNonce: Int32, tssShare: String, tssIndex: String, selectedTag: String, verifier: String, verifierID: String, nodeIndexes: [Int], tssEndpoints: [String], authSigs: [String]) {
         self.publicKey = publicKey
         self.factorKey = factorKey
         self.tssNonce = tssNonce
@@ -30,4 +25,3 @@ public class EthTssAccountParams {
         self.authSigs = authSigs
     }
 }
-
