@@ -32,34 +32,12 @@ enum EthereumSignerError: Error {
 }
 
 public class EthereumTssAccount: EthereumAccountProtocol {
-    public let selectedTag: String
-    public let verifier: String
-    public let factorKey: String
-    public let verifierID: String
-    public let publicKey: String
-    public let authSigs: [String]
-    public let tssNonce: Int32
-    public let tssShare: String
-    public let tssIndex: String
-    public let nodeIndexes: [Int]
-    public let tssEndpoints: [String]
-    public let address: EthereumAddress
+    public var address: web3.EthereumAddress
+    public let ethAccountParams: EthTssAccountParams
 
-    required public init(evmAddress: String, pubkey: String, factorKey: String, tssNonce: Int32, tssShare: String,
-                         tssIndex: String, selectedTag: String, verifier: String, verifierID: String, nodeIndexes: [Int],
-                         tssEndpoints: [String], authSigs: [String]) throws {
-            self.factorKey = factorKey
-            self.selectedTag = selectedTag
-            self.verifier = verifier
-            self.verifierID = verifierID
-            self.publicKey = pubkey
-            self.nodeIndexes = nodeIndexes
-            self.tssEndpoints = tssEndpoints
-            self.tssNonce = tssNonce
-            self.tssIndex = tssIndex
-            self.tssShare = tssShare
-            self.address = EthereumAddress(evmAddress)
-            self.authSigs = authSigs
+    required public init(params: EthTssAccountParams) throws {
+        self.ethAccountParams = params
+        self.address = EthereumAddress(params.evmAddress)
         }
 
         /// hash and sign data
@@ -90,10 +68,7 @@ public class EthereumTssAccount: EthereumAccountProtocol {
         /// Signing Data without hashing
         public func sign(message: Data) throws -> Data {
             // Create tss Client using helper
-            let (client, coeffs) = try bootstrapTssClient(selectedTag: self.selectedTag, tssNonce: self.tssNonce,
-                                                          publicKey: self.publicKey, tssShare: self.tssShare, tssIndex: self.tssIndex,
-                                                          nodeIndexes: self.nodeIndexes, factorKey: self.factorKey, verifier: self.verifier,
-                                                          verifierId: self.verifierID, tssEndpoints: self.tssEndpoints)
+            let (client, coeffs) = try bootstrapTssClient(params: self.ethAccountParams)
 
             // Wait for sockets to be connected
             let connected = try client.checkConnected()
@@ -101,7 +76,7 @@ public class EthereumTssAccount: EthereumAccountProtocol {
                 throw EthereumSignerError.unknownError
             }
 
-            let precompute = try client.precompute(serverCoeffs: coeffs, signatures: self.authSigs)
+            let precompute = try client.precompute(serverCoeffs: coeffs, signatures: self.ethAccountParams.authSigs)
 
             let ready = try client.isReady()
             if !(ready) {
@@ -111,9 +86,9 @@ public class EthereumTssAccount: EthereumAccountProtocol {
             let signingMessage = message.base64EncodedString()
 
             // swiftlint:disable:next identifier_name
-            let (s, r, v) = try client.sign(message: signingMessage, hashOnly: true, original_message: nil, precompute: precompute, signatures: self.authSigs)
+            let (s, r, v) = try client.sign(message: signingMessage, hashOnly: true, original_message: nil, precompute: precompute, signatures: self.ethAccountParams.authSigs)
 
-            try client.cleanup(signatures: self.authSigs)
+            try client.cleanup(signatures: self.ethAccountParams.authSigs)
 
             guard let signature = Data(hexString: try TSSHelpers.hexSignature(s: s, r: r, v: v)) else { throw EthereumSignerError.unknownError }
             return signature
