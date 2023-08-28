@@ -8,4 +8,13 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         
 //        XCTAssertEqual(Web3SwiftMpcProvider().text, "Hello, World!")
     }
+    
+    func testSigningMessage() {
+        
+        
+    }
+    
+    func testSigningTx() {
+        
+    }
 }
