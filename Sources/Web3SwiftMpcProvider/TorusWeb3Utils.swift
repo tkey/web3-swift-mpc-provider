@@ -36,8 +36,8 @@ public final class TorusWeb3Utils {
         return decimalWei / etherInWei
     }
 
-    public static func toEther(Gwie: BigUInt) -> Ether {
-        guard let decimalWei = Double(Gwie.description) else {
+    public static func toEther(gwei: BigUInt) -> Ether {
+        guard let decimalWei = Double(gwei.description) else {
             return 0
         }
         return decimalWei / etherInGwei
@@ -58,8 +58,8 @@ public final class TorusWeb3Utils {
     }
 
     // Only used for calcurating gas price and gas limit.
-    public static func toWei(GWei: Double) -> Wei {
-        return Wei(GWei * 1000000000)
+    public static func toWei(gwei: Double) -> Wei {
+        return Wei(gwei * 1000000000)
     }
 
     public static func generateAddressFromPubKey(publicKeyX: String, publicKeyY: String) -> String {

@@ -119,15 +119,15 @@ extension String {
     }
 
     var asciiValue: Int {
-        let s = unicodeScalars
-        return Int(s[s.startIndex].value)
+        let str = unicodeScalars
+        return Int(str[str.startIndex].value)
     }
 }
 
 extension Character {
     var asciiValue: Int {
-        let s = String(self).unicodeScalars
-        return Int(s[s.startIndex].value)
+        let str = String(self).unicodeScalars
+        return Int(str[str.startIndex].value)
     }
 }
 
@@ -137,11 +137,11 @@ extension String {
         let arr = Array(lowerCaseAddress)
         let hash = Array(lowerCaseAddress.sha3(.keccak256))
         var result = "0x"
-        for i in 0 ... lowerCaseAddress.count - 1 {
-            if let val = Int(String(hash[i]), radix: 16), val >= 8 {
-                result.append(arr[i].uppercased())
+        for idx in 0 ... lowerCaseAddress.count - 1 {
+            if let val = Int(String(hash[idx]), radix: 16), val >= 8 {
+                result.append(arr[idx].uppercased())
             } else {
-                result.append(arr[i])
+                result.append(arr[idx])
             }
         }
         return result
