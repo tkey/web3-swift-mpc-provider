@@ -92,7 +92,12 @@ public class EthereumTssAccount: EthereumAccountProtocol {
             try client.cleanup(signatures: self.ethAccountParams.authSigs)
 
             guard let signature = Data(hexString: try TSSHelpers.hexSignature(s: s, r: r, v: v)) else { throw EthereumSignerError.unknownError }
-            return signature
+
+            let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s, r: r, v: v, pubKey: Data(hex: self.ethAccountParams.publicKey))
+            if verified {
+                return signature
+            }
+            throw EthereumSignerError.unknownError
         }
 
         /// Signing utf8 encoded message String
