@@ -1,7 +1,6 @@
 import XCTest
-@testable import Web3SwiftMpcProvider
-import secp256k1
 import BigInt
+import Web3SwiftMpcProvider
 import web3
 
 final class Web3SwiftMpcProviderTests: XCTestCase {
@@ -81,7 +80,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
             let transaction = EthereumTransaction(from: fromAddress, to: toAddress, value: amtInGwie, data: Data(), nonce: nonce + 1, gasPrice: totalGas, gasLimit: gasLimit, chainId: chainID)
             
             // also sign function includes verify logic, so if verification fails then test will fail
-            let signed = try tssAccount.sign(transaction: transaction)
+            let _ = try tssAccount.sign(transaction: transaction)
         } catch let err {
             XCTFail(err.localizedDescription)
         }

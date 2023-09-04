@@ -1,8 +1,7 @@
 on:
   push:
     branches:
-      - master
-      - v2
+      - main
   pull_request:
     types:
       - opened
@@ -15,17 +14,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      
-      - name: Lint code using SwiftLint
+      - name: SwiftLint
         run: swiftlint lint ./Sources --reporter github-actions-logging
-
-      # - name: Build
-      #   run: swift build -v
-
       - name: xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "14.2.0"
-          
-      - name: run tests
+      - name: package
         run: xcodebuild test -scheme Web3SwiftMpcProvider -destination "platform=iOS Simulator,OS=16.2,name=iPhone 14" COMPILER_INDEX_STORE_ENABLE=NO
