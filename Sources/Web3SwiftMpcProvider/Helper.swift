@@ -5,7 +5,6 @@ import tss_client_swift
 import web3
 import secp256k1
 
-// swiftlint:disable:next function_parameter_count
 public func bootstrapTssClient (params: EthTssAccountParams) throws -> (TSSClient, [String: String]) {
     if params.publicKey.count < 128 || params.publicKey.count > 130 {
         throw CustomSigningError.generalError(error: "Public Key should be in uncompressed format")
