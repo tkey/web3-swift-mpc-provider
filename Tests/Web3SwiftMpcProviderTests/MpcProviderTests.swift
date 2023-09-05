@@ -93,7 +93,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let _ = try account.sign(message: msg)
     }
 
-    func testSigningTransaction() async throws {
+    func testSigningTransaction() throws {
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
         let tssAccount = try EthereumTssAccount(params: params)
         let RPC_URL = "https://rpc.ankr.com/eth_goerli"
@@ -103,21 +103,21 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let amount = 0.001
         let toAddress = tssAccount.address
         let fromAddress = tssAccount.address
-        let gasPrice = try await web3Client.eth_gasPrice()
+        let gasPrice = BigUInt(938)
         let maxTipInGwie = BigUInt(try TorusWeb3Utils.toEther(gwei: BigUInt(amount)))
         let totalGas = gasPrice + maxTipInGwie
         let gasLimit = BigUInt(21000)
 
         let amtInGwie = TorusWeb3Utils.toWei(ether: amount)
-        let nonce = try await web3Client.eth_getTransactionCount(address: fromAddress, block: .Latest)
+        let nonce = 0
         let transaction = EthereumTransaction(from: fromAddress, to: toAddress, value: amtInGwie, data: Data(), nonce: nonce + 1, gasPrice: totalGas, gasLimit: gasLimit, chainId: chainID)
         let _ = try tssAccount.sign(transaction: transaction)
     }
     
-    func testSignTyped() async throws {
+    func testSignTyped() throws {
         let typedData = try! decoder.decode(TypedData.self, from: example1)
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
         let tssAccount = try EthereumTssAccount(params: params)
-        let signed = try tssAccount.signMessage(message: typedData)
+        let _ = try tssAccount.signMessage(message: typedData)
     }
 }
