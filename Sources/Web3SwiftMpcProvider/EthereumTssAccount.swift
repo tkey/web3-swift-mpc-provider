@@ -24,20 +24,39 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
     public var address: web3.EthereumAddress
     public var ethAccountParams: EthTssAccountParams
 
-    public required init(params: EthTssAccountParams) throws {
+    /// Instantiates an EtheriumTssAccount
+    ///
+    /// - Parameters:
+    ///   - params : Parameters used to initialize the account
+    ///
+    public required init(params: EthTssAccountParams) {
         ethAccountParams = params
         // swiftlint:disable:next line_length
         address = EthereumAddress(KeyUtil.generateAddress(from: Data(hex: ethAccountParams.publicKey).suffix(64)).toChecksumAddress())
     }
 
-    /// hash and sign data
+    /// Signs using provided Data
+    ///
+    /// - Parameters:
+    ///   - data : Data to be signed
+    ///
+    /// - Returns: `Data`
+    ///
+    /// - Throws: On signing failure
     public func sign(data: Data) throws -> Data {
         let hash = data.sha3(.keccak256)
         let signature = try sign(message: hash)
         return signature
     }
 
-    /// hash and sign hex string
+    /// Signs using provided Hex String
+    ///
+    /// - Parameters:
+    ///   - hex : Hex string to be signed
+    ///
+    /// - Returns: `Data`
+    ///
+    /// - Throws: On signing failure
     public func sign(hex: String) throws -> Data {
         if let data = Data(hex: hex) {
             return try sign(data: data)
@@ -46,7 +65,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         }
     }
 
-    /// Signing hashed string
+    /// Signs using provided hash
+    ///
+    /// - Parameters:
+    ///   - hash : Hash to be used for signing
+    ///
+    /// - Returns: `Data`
+    ///
+    /// - Throws: On signing failure
     public func sign(hash: String) throws -> Data {
         if let data = hash.web3.hexData {
             return try sign(message: data)
@@ -55,7 +81,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         }
     }
 
-    /// Signing Data without hashing
+    /// Signs using provided message data
+    ///
+    /// - Parameters:
+    ///   - message : message to be used for signing
+    ///
+    /// - Returns: `Data`
+    ///
+    /// - Throws: On signing failure
     public func sign(message: Data) throws -> Data {
         // Create tss Client using helper
         let (client, coeffs) = try bootstrapTssClient(params: ethAccountParams)
@@ -92,7 +125,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         return signature
     }
 
-    /// Signing utf8 encoded message String
+    /// Signs using provided message string
+    ///
+    /// - Parameters:
+    ///   - message : message to be used for signing
+    ///
+    /// - Returns: `Data`
+    ///
+    /// - Throws: On signing failure
     public func sign(message: String) throws -> Data {
         if let data = message.data(using: .utf8) {
             return try sign(data: data)
@@ -101,7 +141,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         }
     }
 
-    /// prefix message and hash it before signing
+    /// Signs using provided message data, prefixing the data first
+    ///
+    /// - Parameters:
+    ///   - message : message to be used for signing
+    ///
+    /// - Returns: `String`
+    ///
+    /// - Throws: On signing failure
     public func signMessage(message: Data) throws -> String {
         let prefix = "\u{19}Ethereum Signed Message:\n\(String(message.count))"
         guard var data = prefix.data(using: .ascii) else {
@@ -125,7 +172,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         return signed.web3.hexString
     }
 
-    /// signing TypedData
+    /// Signs using provided structured typed message (EIP712)
+    ///
+    /// - Parameters:
+    ///   - message : message to be used for signing
+    ///
+    /// - Returns: `String`
+    ///
+    /// - Throws: On signing failure
     public func signMessage(message: TypedData) throws -> String {
         let hash = try message.signableHash()
 
@@ -144,7 +198,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         return signed.web3.hexString
     }
 
-    /// Signing EthereumTransaction
+    /// Signs an ethereum transaction
+    ///
+    /// - Parameters:
+    ///   - transaction : Transaction to be signed
+    ///
+    /// - Returns: `SignedTransaction`
+    ///
+    /// - Throws: On signing failure
     public func sign(transaction: EthereumTransaction) throws -> SignedTransaction {
         guard let raw = transaction.raw else {
             throw EthereumSignerError.emptyRawTransaction

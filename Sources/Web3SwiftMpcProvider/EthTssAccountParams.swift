@@ -10,6 +10,21 @@ public final class EthTssAccountParams {
     private(set) var nodeIndexes: [Int]
     private(set) var tssEndpoints: [String]
     private(set) var authSigs: [String]
+    /// Instantiates EthTssAccountParams which are used to instantiate an EtheriumTssAccount
+    ///
+    /// - Parameters:
+    ///   - publicKey : Public key for the account, EtheriumAddress is derived from this.
+    ///   - factorKey: The factor key
+    ///   - tssNonce: The current tss nonce
+    ///   - tssShare: The current tss share
+    ///   - tssIndex: The index corresponding to the tssShare
+    ///   - selectedTag: The current tss tag
+    ///   - verifier: The verifier for the account
+    ///   - verifierID: The identifier for the account
+    ///   - nodeIndexes: The node indexes returned form the sapphire network
+    ///   - tssEndpoints: The tss endpoints for the sapphire network
+    ///   - authSigs: The signatures returned for the sapphire network
+    ///
     // swiftlint:disable:next line_length
     public init(publicKey: String, factorKey: String, tssNonce: Int32, tssShare: String, tssIndex: String, selectedTag: String, verifier: String, verifierID: String, nodeIndexes: [Int], tssEndpoints: [String], authSigs: [String]) {
         self.publicKey = publicKey
