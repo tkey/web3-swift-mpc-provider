@@ -4,7 +4,7 @@ import secp256k1
 import tss_client_swift
 import web3
 
-public enum CustomSigningError: Error {
+enum CustomSigningError: Error {
     case generalError(error: String = "")
 
     public var errorDescription: String {
