@@ -96,10 +96,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
     func testSigningTransaction() throws {
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
         let tssAccount = try EthereumTssAccount(params: params)
-        let RPC_URL = "https://rpc.ankr.com/eth_goerli"
         let chainID = 5
-        let web3Client = EthereumHttpClient(url: URL(string: RPC_URL)!)
-
         let amount = 0.001
         let toAddress = tssAccount.address
         let fromAddress = tssAccount.address
