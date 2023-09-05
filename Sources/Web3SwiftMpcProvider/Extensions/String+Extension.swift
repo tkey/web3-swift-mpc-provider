@@ -14,9 +14,7 @@ extension String {
         }
         return self
     }
-}
-
-extension String {
+    
     func toChecksumAddress() -> String {
         let lowerCaseAddress = stripHexPrefix().lowercased()
         let arr = Array(lowerCaseAddress)

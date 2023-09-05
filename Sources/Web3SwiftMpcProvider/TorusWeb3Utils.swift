@@ -61,21 +61,4 @@ public final class TorusWeb3Utils {
     public static func toWei(gwei: Double) -> Wei {
         return Wei(gwei * 1000000000)
     }
-
-    public static func generateAddressFromPubKey(publicKeyX: String, publicKeyY: String) -> String {
-        let publicKeyHex = "04" + publicKeyX.addLeading0sForLength64()  + publicKeyY.addLeading0sForLength64()
-        let publicKeyData = Data(hexString: publicKeyHex)!
-
-        do {
-            let publicKey = try P256.KeyAgreement.PublicKey(x963Representation: publicKeyData)
-            let publicKeyBytes = publicKey.rawRepresentation// .dropFirst().dropLast() // Remove the first byte (0x04)
-            let ethAddressLower = "0x" + keccak256Data(publicKeyBytes).suffix(40)
-            return ethAddressLower.toChecksumAddress()
-        } catch {
-            // Handle the error if necessary
-            print("Failed to derive public key: \(error)")
-            return ""
-        }
-    }
-
 }

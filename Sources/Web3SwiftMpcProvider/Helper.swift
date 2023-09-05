@@ -11,13 +11,16 @@ public func bootstrapTssClient (params: EthTssAccountParams) throws -> (TSSClien
     }
 
     // generate a random nonce for sessionID
-    let randomKey = BigUInt(SECP256K1.generatePrivateKey()!)
-    let random = BigInt(sign: .plus, magnitude: randomKey) + BigInt(Date().timeIntervalSince1970)
-    let sessionNonce = TSSHelpers.hashMessage(message: String(random))
+    guard let randomKey = SECP256K1.generatePrivateKey() else {
+        throw CustomSigningError.generalError(error: "Could not generate random key for sessionID nonce")
+    }
+    let randomKeyBigUint = BigUInt(randomKey)
+    let random = BigInt(sign: .plus, magnitude: randomKeyBigUint) + BigInt(Date().timeIntervalSince1970)
+    let sessionNonce = TSSHelpers.base64ToBase64url(base64: TSSHelpers.hashMessage(message: String(random)))
     // create the full session string
     let session = TSSHelpers.assembleFullSession(verifier: params.verifier, verifierId: params.verifierID, tssTag: params.selectedTag, tssNonce: String(params.tssNonce), sessionNonce: sessionNonce)
 
-    let userTssIndex = BigInt(params.tssIndex, radix: 16)!
+    let userTssIndex = BigInt(params.tssIndex, radix: 16) ?? BigInt.zero
     // total parties, including the client
     let parties = params.nodeIndexes.count > 0 ? params.nodeIndexes.count + 1 : 4
 
@@ -28,7 +31,7 @@ public func bootstrapTssClient (params: EthTssAccountParams) throws -> (TSSClien
 
     let coeffs = try TSSHelpers.getServerCoefficients(participatingServerDKGIndexes: nodeInd.map({ BigInt($0) }), userTssIndex: userTssIndex)
 
-    let shareUnsigned = BigUInt(params.tssShare, radix: 16)!
+    let shareUnsigned = BigUInt(params.tssShare, radix: 16) ?? BigUInt.zero
     let share = BigInt(sign: .plus, magnitude: shareUnsigned)
     let denormalizeShare = try TSSHelpers.denormalizeShare(participatingServerDKGIndexes: nodeInd.map({ BigInt($0) }), userTssIndex: userTssIndex, userTssShare: share)
 
