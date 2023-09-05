@@ -1,10 +1,3 @@
-//
-//  TorusWeb3Utils.swift
-//  tkey_ios
-//
-//  Created by himanshu on 09/08/23.
-//
-
 import BigInt
 import Foundation
 import web3
@@ -13,17 +6,7 @@ import CryptoKit
 public typealias Ether = Double
 public typealias Wei = BigUInt
 
-public func keccak256Data(_ data: Data) -> String {
-    let hash = data.sha3(.keccak256)
-    return "0x" + hash.map { String(format: "%02x", $0) }.joined()
-}
-
 public final class TorusWeb3Utils {
-
-    public static func timeMinToSec(val: Double) -> Double {
-        return val * 60
-    }
-
     // NOTE: calculate wei by 10^18
     private static let etherInWei = pow(Double(10), 18)
     private static let etherInGwei = pow(Double(10), 9)
