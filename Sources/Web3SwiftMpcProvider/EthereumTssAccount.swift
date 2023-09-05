@@ -26,6 +26,7 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
 
     public required init(params: EthTssAccountParams) throws {
         ethAccountParams = params
+        // swiftlint:disable:next line_length
         address = EthereumAddress(KeyUtil.generateAddress(from: Data(hex: ethAccountParams.publicKey).suffix(64)).toChecksumAddress())
     }
 
@@ -74,14 +75,18 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
 
         let signingMessage = message.base64EncodedString()
 
+        // swiftlint:disable:next identifier_name line_length
         let (s, r, v) = try client.sign(message: signingMessage, hashOnly: true, original_message: nil, precompute: precompute, signatures: ethAccountParams.authSigs)
 
         try client.cleanup(signatures: ethAccountParams.authSigs)
 
+        // swiftlint:disable:next line_length
         let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s, r: r, v: v, pubKey: Data(hex: ethAccountParams.publicKey))
         if !verified {
             throw EthereumSignerError.unknownError
         }
+
+        // swiftlint:disable:next line_length
         guard let signature = Data(hexString: try TSSHelpers.hexSignature(s: s, r: r, v: v)) else { throw EthereumSignerError.unknownError }
 
         return signature
@@ -125,7 +130,7 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         let hash = try message.signableHash()
 
         var signed = try sign(message: hash)
-        
+
         // Check last char (v)
         guard var last = signed.popLast() else {
             throw EthereumAccountError.signError
@@ -164,6 +169,7 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         let random = BigInt(sign: .plus, magnitude: randomKeyBigUint) + BigInt(Date().timeIntervalSince1970)
         let sessionNonce = TSSHelpers.base64ToBase64url(base64: TSSHelpers.hashMessage(message: String(random)))
         // create the full session string
+        // swiftlint:disable:next line_length
         let session = TSSHelpers.assembleFullSession(verifier: params.verifier, verifierId: params.verifierID, tssTag: params.selectedTag, tssNonce: String(params.tssNonce), sessionNonce: sessionNonce)
 
         let userTssIndex = BigInt(params.tssIndex, radix: 16) ?? BigInt.zero
@@ -172,17 +178,20 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
 
         // index of the client, last index of partiesIndexes
         let clientIndex = Int32(parties - 1)
-
+        // swiftlint:disable:next line_length
         let (urls, socketUrls, partyIndexes, nodeInd) = try TSSHelpers.generateEndpoints(parties: parties, clientIndex: Int(clientIndex), nodeIndexes: params.nodeIndexes, urls: params.tssEndpoints)
-
+        // swiftlint:disable:next line_length
         let coeffs = try TSSHelpers.getServerCoefficients(participatingServerDKGIndexes: nodeInd.map({ BigInt($0) }), userTssIndex: userTssIndex)
 
         let shareUnsigned = BigUInt(params.tssShare, radix: 16) ?? BigUInt.zero
         let share = BigInt(sign: .plus, magnitude: shareUnsigned)
+        // swiftlint:disable:next line_length
         let denormalizeShare = try TSSHelpers.denormalizeShare(participatingServerDKGIndexes: nodeInd.map({ BigInt($0) }), userTssIndex: userTssIndex, userTssShare: share)
-
+        // swiftlint:disable:next line_length
         let client = try TSSClient(session: session, index: Int32(clientIndex), parties: partyIndexes.map({ Int32($0) }),
+                                   // swiftlint:disable:next line_length
                                    endpoints: urls.map({ URL(string: $0 ?? "") }), tssSocketEndpoints: socketUrls.map({ URL(string: $0 ?? "") }),
+                                   // swiftlint:disable:next line_length
                                    share: TSSHelpers.base64Share(share: denormalizeShare), pubKey: try TSSHelpers.base64PublicKey(pubKey: Data(hex: params.publicKey)))
 
         return (client, coeffs)

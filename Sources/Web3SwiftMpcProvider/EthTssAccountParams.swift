@@ -10,6 +10,7 @@ public final class EthTssAccountParams {
     private(set) var nodeIndexes: [Int]
     private(set) var tssEndpoints: [String]
     private(set) var authSigs: [String]
+    // swiftlint:disable:next line_length
     public init(publicKey: String, factorKey: String, tssNonce: Int32, tssShare: String, tssIndex: String, selectedTag: String, verifier: String, verifierID: String, nodeIndexes: [Int], tssEndpoints: [String], authSigs: [String]) {
         self.publicKey = publicKey
         self.factorKey = factorKey
