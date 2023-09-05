@@ -1,7 +1,6 @@
 import BigInt
 import Foundation
 import web3
-import CryptoKit
 
 public typealias Ether = Double
 public typealias Wei = BigUInt

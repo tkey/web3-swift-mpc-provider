@@ -1,5 +1,4 @@
 import BigInt
-import CryptoKit
 import Foundation
 import secp256k1
 import tss_client_swift
@@ -106,8 +105,18 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         data.append(message)
         let hash = data.web3.keccak256
 
-        let signed = try sign(message: hash)
+        var signed = try sign(message: hash)
 
+        // Check last char (v)
+        guard var last = signed.popLast() else {
+            throw EthereumAccountError.signError
+        }
+
+        if last < 27 {
+            last += 27
+        }
+
+        signed.append(last)
         return signed.web3.hexString
     }
 
@@ -115,8 +124,18 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
     public func signMessage(message: TypedData) throws -> String {
         let hash = try message.signableHash()
 
-        let signed = try sign(message: hash)
+        var signed = try sign(message: hash)
+        
+        // Check last char (v)
+        guard var last = signed.popLast() else {
+            throw EthereumAccountError.signError
+        }
 
+        if last < 27 {
+            last += 27
+        }
+
+        signed.append(last)
         return signed.web3.hexString
     }
 

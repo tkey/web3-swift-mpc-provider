@@ -21,8 +21,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let account = try EthereumTssAccount(params: params)
 
         let msg = "hello world"
-        let signature = try account.sign(message: msg)
-        let _ = String(bytes: signature)
+        let _ = try account.sign(message: msg)
     }
 
     func testSigningTx() async throws {
@@ -40,9 +39,6 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
 
         let tssAccount = try EthereumTssAccount(params: params)
-
-        //                        let RPC_URL = "https://api.avax-test.network/ext/bc/C/rpc"
-        //                        let chainID = 43113
         let RPC_URL = "https://rpc.ankr.com/eth_goerli"
         let chainID = 5
         let web3Client = EthereumHttpClient(url: URL(string: RPC_URL)!)
@@ -58,8 +54,6 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let amtInGwie = TorusWeb3Utils.toWei(ether: amount)
         let nonce = try await web3Client.eth_getTransactionCount(address: fromAddress, block: .Latest)
         let transaction = EthereumTransaction(from: fromAddress, to: toAddress, value: amtInGwie, data: Data(), nonce: nonce + 1, gasPrice: totalGas, gasLimit: gasLimit, chainId: chainID)
-
-        // also sign function includes verify logic, so if verification fails then test will fail
         let _ = try tssAccount.sign(transaction: transaction)
     }
 }
