@@ -14,11 +14,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      - name: SwiftLint
-        run: swiftlint lint ./Sources --reporter github-actions-logging
       - name: xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "14.2.0"
       - name: package
         run: xcodebuild test -scheme Web3SwiftMpcProvider -destination "platform=iOS Simulator,OS=16.2,name=iPhone 14" COMPILER_INDEX_STORE_ENABLE=NO
+      - name: SwiftLint
+        run: swiftlint lint ./Sources --reporter github-actions-logging
