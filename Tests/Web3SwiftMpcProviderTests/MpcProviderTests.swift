@@ -47,7 +47,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let toAddress = tssAccount.address
         let fromAddress = tssAccount.address
         let gasPrice = try await web3Client.eth_gasPrice()
-        let maxTipInGwie = BigUInt(TorusWeb3Utils.toEther(gwei: BigUInt(amount)))
+        let maxTipInGwie = BigUInt(try TorusWeb3Utils.toEther(gwei: BigUInt(amount)))
         let totalGas = gasPrice + maxTipInGwie
         let gasLimit = BigUInt(21000)
 
