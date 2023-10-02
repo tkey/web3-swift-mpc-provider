@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/torusresearch/tss-client-swift.git",
         "state": {
           "branch": null,
-          "revision": "a5f54880550d7c0f2979e06290a1ac0941626b3f",
-          "version": "1.0.12"
+          "revision": "455c23ab17081f7a1b78db03235c50fc2b0a2c9a",
+          "version": "1.0.14"
         }
       },
       {
