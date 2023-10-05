@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/argentlabs/web3.swift", from:"1.6.0"),
-        .package(url: "https://github.com/torusresearch/tss-client-swift.git", from: "1.0.14"),
+        .package(url: "https://github.com/torusresearch/tss-client-swift.git", from: "1.0.15"),
     ],
     targets: [
         .target(
