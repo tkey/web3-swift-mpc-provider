@@ -1,8 +1,8 @@
 import BigInt
 import Foundation
-import secp256k1
 import tss_client_swift
 import web3
+import curvelib
 
 enum CustomSigningError: Error {
     case generalError(error: String = "")
@@ -106,15 +106,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
             throw EthereumSignerError.unknownError
         }
 
-        let signingMessage = message.base64EncodedString()
+        let signingMessage = message
 
         // swiftlint:disable:next identifier_name line_length
-        let (s, r, v) = try client.sign(message: signingMessage, hashOnly: true, original_message: nil, precompute: precompute, signatures: ethAccountParams.authSigs)
-
+        let (s, r, v) = try client.sign(message: signingMessage.base64EncodedString(), hashOnly: true, original_message: nil, precompute: precompute, signatures: ethAccountParams.authSigs)
+    
         try client.cleanup(signatures: ethAccountParams.authSigs)
-
         // swiftlint:disable:next line_length
-        let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s, r: r, v: v, pubKey: Data(hex: ethAccountParams.publicKey))
+        let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s.magnitude.serialize(), r: r.magnitude.serialize(), v: v, pubKey: Data(hex: ethAccountParams.publicKey))
         if !verified {
             throw EthereumSignerError.unknownError
         }
@@ -223,12 +222,11 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         }
 
         // generate a random nonce for sessionID
-        guard let randomKey = SECP256K1.generatePrivateKey() else {
-            throw CustomSigningError.generalError(error: "Could not generate random key for sessionID nonce")
-        }
+        let randomKey = try curvelib.Secp256k1.PrivateKey().rawData
         let randomKeyBigUint = BigUInt(randomKey)
         let random = BigInt(sign: .plus, magnitude: randomKeyBigUint) + BigInt(Date().timeIntervalSince1970)
-        let sessionNonce = TSSHelpers.base64ToBase64url(base64: TSSHelpers.hashMessage(message: String(random)))
+        
+        let sessionNonce = TSSHelpers.base64ToBase64url(base64: TSSHelpers.hashMessage(message: String(random)).base64EncodedString() )
         // create the full session string
         // swiftlint:disable:next line_length
         let session = TSSHelpers.assembleFullSession(verifier: params.verifier, verifierId: params.verifierID, tssTag: params.selectedTag, tssNonce: String(params.tssNonce), sessionNonce: sessionNonce)
