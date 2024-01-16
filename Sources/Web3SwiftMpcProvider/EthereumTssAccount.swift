@@ -113,13 +113,12 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
     
         try client.cleanup(signatures: ethAccountParams.authSigs)
         // swiftlint:disable:next line_length
-        let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s.magnitude.serialize(), r: r.magnitude.serialize(), v: v, pubKey: Data(hex: ethAccountParams.publicKey))
+        let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s, r: r, v: v, pubKey: Data(hex: ethAccountParams.publicKey))
         if !verified {
             throw EthereumSignerError.unknownError
         }
 
-        // swiftlint:disable:next line_length
-        guard let signature = Data(hexString: try TSSHelpers.hexSignature(s: s, r: r, v: v)) else { throw EthereumSignerError.unknownError }
+        let signature = r + s + Data([v])
 
         return signature
     }
