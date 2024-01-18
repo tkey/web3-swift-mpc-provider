@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "curvelib.swift",
+        "repositoryURL": "https://github.com/tkey/curvelib.swift",
+        "state": {
+          "branch": "refactor",
+          "revision": "3477abff071170d005f05397c6049478fa6ecaf3",
+          "version": null
+        }
+      },
+      {
         "package": "GenericJSON",
         "repositoryURL": "https://github.com/iwill/generic-json-swift",
         "state": {
@@ -122,9 +131,9 @@
         "package": "tss-client-swift",
         "repositoryURL": "https://github.com/torusresearch/tss-client-swift.git",
         "state": {
-          "branch": null,
-          "revision": "e1262449b2810b10c7ac2b29215aebf4d8f422f7",
-          "version": "1.0.15"
+          "branch": "inline_replace_secp256k1",
+          "revision": "196e39fb6853ea88849b25130ef0de4247bb89a1",
+          "version": null
         }
       },
       {
