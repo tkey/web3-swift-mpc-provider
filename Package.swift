@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/argentlabs/web3.swift", from:"1.6.0"),
-        .package(url: "https://github.com/torusresearch/tss-client-swift.git", .branch("inline_replace_secp256k1")),
+        .package(url: "https://github.com/torusresearch/tss-client-swift.git", .branch("extenstion")),
     ],
     targets: [
         .target(
