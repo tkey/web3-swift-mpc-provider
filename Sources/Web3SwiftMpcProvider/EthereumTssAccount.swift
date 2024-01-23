@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import secp256k1
+import curvelib_swift
 import tss_client_swift
 import web3
 
@@ -223,7 +223,7 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         }
 
         // generate a random nonce for sessionID
-        let randomKey = try CurveSecp256k1.generatePrivateKey()
+        let randomKey = try SecretKey().serialize()
         guard let randomKeyBigUint = BigUInt(hex: randomKey) else {
             throw CustomSigningError.generalError(error: "Could not generate random key for sessionID nonce")
         }

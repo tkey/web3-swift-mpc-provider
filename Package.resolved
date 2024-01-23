@@ -23,8 +23,8 @@
         "package": "curvelib.swift",
         "repositoryURL": "https://github.com/tkey/curvelib.swift",
         "state": {
-          "branch": "refactor",
-          "revision": "3477abff071170d005f05397c6049478fa6ecaf3",
+          "branch": "extension",
+          "revision": "d5acae05bfd832393524ec8e0bf8820a745e5331",
           "version": null
         }
       },
@@ -131,8 +131,8 @@
         "package": "tss-client-swift",
         "repositoryURL": "https://github.com/torusresearch/tss-client-swift.git",
         "state": {
-          "branch": "inline_replace_secp256k1",
-          "revision": "196e39fb6853ea88849b25130ef0de4247bb89a1",
+          "branch": "extenstion",
+          "revision": "2f0a2357dfa882d8a0e03580ebe22534f5d2c527",
           "version": null
         }
       },
