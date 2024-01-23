@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import secp256k1
+import curveSecp256k1
 import tss_client_swift
 import web3
 
@@ -223,10 +223,10 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         }
 
         // generate a random nonce for sessionID
-        guard let randomKey = SECP256K1.generatePrivateKey() else {
+        let randomKey = try SecretKey().serialize()
+        guard let randomKeyBigUint = BigUInt(hex: randomKey) else {
             throw CustomSigningError.generalError(error: "Could not generate random key for sessionID nonce")
         }
-        let randomKeyBigUint = BigUInt(randomKey)
         let random = BigInt(sign: .plus, magnitude: randomKeyBigUint) + BigInt(Date().timeIntervalSince1970)
         let sessionNonce = TSSHelpers.base64ToBase64url(base64: TSSHelpers.hashMessage(message: String(random)))
         // create the full session string
