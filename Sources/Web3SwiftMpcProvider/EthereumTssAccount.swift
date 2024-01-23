@@ -1,6 +1,6 @@
 import BigInt
 import Foundation
-import curvelib_swift
+import curveSecp256k1
 import tss_client_swift
 import web3
 
