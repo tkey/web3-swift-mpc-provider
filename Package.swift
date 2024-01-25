@@ -10,6 +10,13 @@ let package = Package(
         .library(
             name: "Web3SwiftMpcProvider",
             targets: ["Web3SwiftMpcProvider"]),
+        .library(
+            name: "MPCEthereumProvider",
+            targets: ["MPCEthereumProvider"]),
+        .library(
+            name: "MPCBitcoinProvider",
+            targets: ["MPCBitcoinProvider"]),
+
 
     ],
     dependencies: [
@@ -19,12 +26,22 @@ let package = Package(
     targets: [
         .target(
             name: "Web3SwiftMpcProvider",
-            dependencies: ["web3.swift", "tss-client-swift"],
+            dependencies: ["tss-client-swift"],
             path: "Sources/Web3SwiftMpcProvider"
+        ),
+        .target(
+            name: "MPCEthereumProvider",
+            dependencies: ["web3.swift", "Web3SwiftMpcProvider"],
+            path: "Sources/EthereumProvider"
+        ),
+        .target(
+            name: "MPCBitcoinProvider",
+            dependencies: ["Web3SwiftMpcProvider"],
+            path: "Sources/BitcoinProvider"
         ),
         .testTarget(
             name: "Web3SwiftMpcProviderTests",
-            dependencies: ["Web3SwiftMpcProvider"],
+            dependencies: ["MPCEthereumProvider"],
             path: "Tests"),
     ],
     swiftLanguageVersions: [.v5]
