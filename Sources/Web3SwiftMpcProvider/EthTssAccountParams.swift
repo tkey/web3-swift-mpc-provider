@@ -1,5 +1,7 @@
+import Foundation
+
 public final class EthTssAccountParams {
-    private(set) var publicKey: String
+    public private(set) var publicKey: String
     private(set) var factorKey: String
     private(set) var tssNonce: Int32
     private(set) var tssShare: String
