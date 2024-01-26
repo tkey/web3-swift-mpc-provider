@@ -1,9 +1,8 @@
 import BigInt
-import Web3SwiftMpcProvider
 import Foundation
 import curveSecp256k1
-import tss_client_swift
 import web3
+import mpc_kit_swift
 
 enum CustomSigningError: Error {
     case generalError(error: String = "")
@@ -21,14 +20,15 @@ enum EthereumSignerError: Error {
     case unknownError
 }
 
-extension TssAccount: EthereumAccountProtocol {
+extension  MpcSigningKit : EthereumAccountProtocol {
     public var address: web3.EthereumAddress {
-        return EthereumAddress(KeyUtil.generateAddress(from: Data(hex: ethAccountParams.publicKey).suffix(64)).toChecksumAddress())
+        // try async
+        return EthereumAddress(KeyUtil.generateAddress(from: self.getTssPubKey().suffix(64) ).toChecksumAddress())
     }
 
     
     public func sign(message: Data) throws -> Data {
-        return try self.tssSign(message: message)
+        return self.tssSign(message: message)
     }
     
     /// Signs using provided Data

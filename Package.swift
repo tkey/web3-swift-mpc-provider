@@ -8,9 +8,6 @@ let package = Package(
     platforms: [.iOS(.v13), .macOS(.v11)],
     products: [
         .library(
-            name: "Web3SwiftMpcProvider",
-            targets: ["Web3SwiftMpcProvider"]),
-        .library(
             name: "MPCEthereumProvider",
             targets: ["MPCEthereumProvider"]),
         .library(
@@ -21,28 +18,26 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/argentlabs/web3.swift", from:"1.6.0"),
-        .package(url: "https://github.com/torusresearch/tss-client-swift.git", from: "2.0.0"),
+        .package(url: "https://github.com/tkey/mpc-kit-swift", branch: "main"),
     ],
     targets: [
-        .target(
-            name: "Web3SwiftMpcProvider",
-            dependencies: ["tss-client-swift"],
-            path: "Sources/Web3SwiftMpcProvider"
-        ),
+        
         .target(
             name: "MPCEthereumProvider",
-            dependencies: ["web3.swift", "Web3SwiftMpcProvider"],
+            dependencies: ["web3.swift",
+               .product(name: "mpc-kit-swift", package: "mpc-kit-swift")
+            ],
             path: "Sources/EthereumProvider"
         ),
         .target(
             name: "MPCBitcoinProvider",
-            dependencies: ["Web3SwiftMpcProvider"],
+            dependencies: [.product(name: "mpc-kit-swift", package: "mpc-kit-swift")],
             path: "Sources/BitcoinProvider"
         ),
         .testTarget(
             name: "Web3SwiftMpcProviderTests",
             dependencies: ["MPCEthereumProvider"],
             path: "Tests"),
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
+//    swiftLanguageVersions: [.v5]
 )

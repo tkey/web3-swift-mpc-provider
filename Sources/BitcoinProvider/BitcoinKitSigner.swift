@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Web3SwiftMpcProvider
+import mpc_kit_swift
 
 public protocol ISigner {
     func sign( message: Data ) -> Data
@@ -14,10 +14,10 @@ public protocol ISigner {
     var publicKey : Data { get }
 }
 
-extension TssAccount : ISigner {
+extension MpcSigningKit : ISigner {
     public func sign(message: Data) -> Data {
-        let data =  try? self.tssSign(message: message)
-        return data ?? Data()
+        let data =  self.tssSign(message: message)
+        return data
     }
     
     public func schnorrSign(message: Data, publicKey: Data) -> Data {
@@ -25,7 +25,7 @@ extension TssAccount : ISigner {
     }
     
     public var publicKey: Data {
-        return Data(hex: self.ethAccountParams.publicKey)
+        return self.getTssPubKey()
     }
     
 }
