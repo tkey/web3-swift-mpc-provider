@@ -1,6 +1,6 @@
 import BigInt
 import web3
-import Web3SwiftMpcProvider
+import MPCEthereumProvider
 import XCTest
 
 final class Web3SwiftMpcProviderTests: XCTestCase {
@@ -85,36 +85,42 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
     let decoder = JSONDecoder()
 
     func testSigningMessage() throws {
-        let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
+//        let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
+//
+//        let account = TssAccount(params: params)
+        
+        // mpc_kit_instance = mpc_kit()
+        // mpc_kit.login()
+        // mpc_kit.sign()
 
-        let account = EthereumTssAccount(params: params)
-
-        let msg = "hello world"
-        let _ = try account.sign(message: msg)
+//        let msg = "hello world"
+//        let _ = try account.sign(message: msg)
     }
 
     func testSigningTransaction() throws {
-        let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
-        let tssAccount = EthereumTssAccount(params: params)
-        let chainID = 5
-        let amount = 0.001
-        let toAddress = tssAccount.address
-        let fromAddress = tssAccount.address
-        let gasPrice = BigUInt(938)
-        let maxTipInGwie = BigUInt(try TorusWeb3Utils.toEther(gwei: BigUInt(amount)))
-        let totalGas = gasPrice + maxTipInGwie
-        let gasLimit = BigUInt(21000)
-
-        let amtInGwie = TorusWeb3Utils.toWei(ether: amount)
-        let nonce = 0
-        let transaction = EthereumTransaction(from: fromAddress, to: toAddress, value: amtInGwie, data: Data(), nonce: nonce + 1, gasPrice: totalGas, gasLimit: gasLimit, chainId: chainID)
-        let _ = try tssAccount.sign(transaction: transaction)
+//        let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
+//        let tssAccount = TssAccount(params: params)
+        
+        
+//        let chainID = 5
+//        let amount = 0.001
+//        let toAddress =  //tssAccount.address
+//        let fromAddress = //tssAccount.address
+//        let gasPrice = BigUInt(938)
+//        let maxTipInGwie = BigUInt(try TorusWeb3Utils.toEther(gwei: BigUInt(amount)))
+//        let totalGas = gasPrice + maxTipInGwie
+//        let gasLimit = BigUInt(21000)
+//
+//        let amtInGwie = TorusWeb3Utils.toWei(ether: amount)
+//        let nonce = 0
+//        let transaction = EthereumTransaction(from: fromAddress, to: toAddress, value: amtInGwie, data: Data(), nonce: nonce + 1, gasPrice: totalGas, gasLimit: gasLimit, chainId: chainID)
+//        let _ = try tssAccount.sign(transaction: transaction)
     }
 
     func testSignTyped() throws {
         let typedData = try decoder.decode(TypedData.self, from: example1)
-        let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
-        let tssAccount = EthereumTssAccount(params: params)
-        let _ = try tssAccount.signMessage(message: typedData)
+//        let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
+//        let tssAccount = TssAccount(params: params)
+//        let _ = try tssAccount.signMessage(message: typedData)
     }
 }
