@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import mpc_kit_swift
+import mpc_core_kit_swift
 
 public protocol ISigner {
     func sign( message: Data ) -> Data
@@ -14,7 +14,8 @@ public protocol ISigner {
     var publicKey : Data { get }
 }
 
-extension MpcSigningKit : ISigner {
+
+extension MpcCoreKit : ISigner {
     public func sign(message: Data) -> Data {
         let data =  self.tssSign(message: message)
         return data

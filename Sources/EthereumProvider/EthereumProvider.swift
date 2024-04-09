@@ -2,7 +2,7 @@ import BigInt
 import Foundation
 import curveSecp256k1
 import web3
-import mpc_kit_swift
+import mpc_core_kit_swift
 
 enum CustomSigningError: Error {
     case generalError(error: String = "")
@@ -20,7 +20,7 @@ enum EthereumSignerError: Error {
     case unknownError
 }
 
-extension  MpcSigningKit : EthereumAccountProtocol {
+extension  MpcCoreKit : EthereumAccountProtocol {
     public var address: web3.EthereumAddress {
         // try async
         return EthereumAddress(KeyUtil.generateAddress(from: self.getTssPubKey().suffix(64) ).toChecksumAddress())
