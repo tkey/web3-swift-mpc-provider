@@ -29,10 +29,13 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
     /// - Parameters:
     ///   - params : Parameters used to initialize the account
     ///
-    public required init(params: EthTssAccountParams) {
+    public required init(params: EthTssAccountParams) throws {
         ethAccountParams = params
+        guard let publicKey = Data(hexString: ethAccountParams.publicKey) else {
+            throw CustomSigningError.generalError(error: "Cannot convert public key to data")
+        }
         // swiftlint:disable:next line_length
-        address = EthereumAddress(KeyUtil.generateAddress(from: Data(hex: ethAccountParams.publicKey).suffix(64)).toChecksumAddress())
+        address = EthereumAddress(KeyUtil.generateAddress(from: publicKey.suffix(64)).toChecksumAddress())
     }
 
     /// Signs using provided Data
@@ -44,7 +47,7 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
     ///
     /// - Throws: On signing failure
     public func sign(data: Data) throws -> Data {
-        let hash = data.sha3(.keccak256)
+        let hash = try keccak256(data: data)
         let signature = try sign(message: hash)
         return signature
     }
@@ -58,7 +61,7 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
     ///
     /// - Throws: On signing failure
     public func sign(hex: String) throws -> Data {
-        if let data = Data(hex: hex) {
+        if let data = Data(hexString: hex) {
             return try sign(data: data)
         } else {
             throw EthereumAccountError.signError
@@ -113,8 +116,11 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
 
         try client.cleanup(signatures: ethAccountParams.authSigs)
 
+        guard let pk = Data(hexString: ethAccountParams.publicKey) else {
+            throw CustomSigningError.generalError(error: "Unable to convert public key to data")
+        }
         // swiftlint:disable:next line_length
-        let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s, r: r, v: v, pubKey: Data(hex: ethAccountParams.publicKey))
+        let verified = TSSHelpers.verifySignature(msgHash: signingMessage, s: s, r: r, v: v, pubKey: pk)
         if !verified {
             throw EthereumSignerError.unknownError
         }
@@ -228,7 +234,7 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
             throw CustomSigningError.generalError(error: "Could not generate random key for sessionID nonce")
         }
         let random = BigInt(sign: .plus, magnitude: randomKeyBigUint) + BigInt(Date().timeIntervalSince1970)
-        let sessionNonce = TSSHelpers.base64ToBase64url(base64: TSSHelpers.hashMessage(message: String(random)))
+        let sessionNonce = TSSHelpers.base64ToBase64url(base64: try TSSHelpers.hashMessage(message: String(random)))
         // create the full session string
         // swiftlint:disable:next line_length
         let session = TSSHelpers.assembleFullSession(verifier: params.verifier, verifierId: params.verifierID, tssTag: params.selectedTag, tssNonce: String(params.tssNonce), sessionNonce: sessionNonce)
@@ -249,11 +255,14 @@ public final class EthereumTssAccount: EthereumAccountProtocol {
         // swiftlint:disable:next line_length
         let denormalizeShare = try TSSHelpers.denormalizeShare(participatingServerDKGIndexes: nodeInd.map({ BigInt($0) }), userTssIndex: userTssIndex, userTssShare: share)
         // swiftlint:disable:next line_length
+        guard let pk = Data(hexString: params.publicKey) else {
+            throw CustomSigningError.generalError(error: "Unable to convert public key to data")
+        }
         let client = try TSSClient(session: session, index: Int32(clientIndex), parties: partyIndexes.map({ Int32($0) }),
                                    // swiftlint:disable:next line_length
                                    endpoints: urls.map({ URL(string: $0 ?? "") }), tssSocketEndpoints: socketUrls.map({ URL(string: $0 ?? "") }),
                                    // swiftlint:disable:next line_length
-                                   share: TSSHelpers.base64Share(share: denormalizeShare), pubKey: try TSSHelpers.base64PublicKey(pubKey: Data(hex: params.publicKey)))
+                                   share: TSSHelpers.base64Share(share: denormalizeShare), pubKey: try TSSHelpers.base64PublicKey(pubKey: pk))
 
         return (client, coeffs)
     }
