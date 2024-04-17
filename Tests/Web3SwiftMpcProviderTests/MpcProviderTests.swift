@@ -87,7 +87,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
     func testSigningMessage() throws {
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
 
-        let account = EthereumTssAccount(params: params)
+        let account = try EthereumTssAccount(params: params)
 
         let msg = "hello world"
         let _ = try account.sign(message: msg)
@@ -95,7 +95,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
 
     func testSigningTransaction() throws {
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
-        let tssAccount = EthereumTssAccount(params: params)
+        let tssAccount = try EthereumTssAccount(params: params)
         let chainID = 5
         let amount = 0.001
         let toAddress = tssAccount.address
@@ -114,7 +114,7 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
     func testSignTyped() throws {
         let typedData = try decoder.decode(TypedData.self, from: example1)
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
-        let tssAccount = EthereumTssAccount(params: params)
+        let tssAccount = try EthereumTssAccount(params: params)
         let _ = try tssAccount.signMessage(message: typedData)
     }
 }
