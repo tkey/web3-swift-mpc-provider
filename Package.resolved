@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/tkey/curvelib.swift",
         "state": {
           "branch": null,
-          "revision": "2df9f638fd121b445ce3b410cd79ac4d0cfa94ed",
-          "version": "1.0.0"
+          "revision": "9f88bd5e56d1df443a908f7a7e81ae4f4d9170ea",
+          "version": "1.0.1"
         }
       },
       {
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/torusresearch/tss-client-swift.git",
         "state": {
           "branch": null,
-          "revision": "30e7ec88b5b854581f2f1dc074cea00462f4142e",
-          "version": "3.0.0"
+          "revision": "40246d5e3ff1d2c97d41846576f7a81d58858981",
+          "version": "4.0.0"
         }
       },
       {

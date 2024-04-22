@@ -14,12 +14,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/argentlabs/web3.swift", from:"1.6.0"),
-        .package(url: "https://github.com/torusresearch/tss-client-swift.git", from: "3.0.0"),
+        .package(url: "https://github.com/torusresearch/tss-client-swift.git", from: "4.0.0"),
+        .package(url: "https://github.com/tkey/curvelib.swift", from: "1.0.1"),
     ],
     targets: [
         .target(
             name: "Web3SwiftMpcProvider",
-            dependencies: ["web3.swift", "tss-client-swift"],
+            dependencies: ["web3.swift", .product(name: "tssClientSwift", package: "tss-client-swift"), .product(name: "curveSecp256k1", package: "curvelib.swift")],
             path: "Sources/Web3SwiftMpcProvider"
         ),
         .testTarget(
