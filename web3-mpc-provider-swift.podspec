@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
   spec.source       = { :git => "https://github.com/tkey/web3-swift-mpc-provider.git", :tag => spec.version }
   spec.source_files = "Sources/**/*.{swift,h,c}"
   spec.dependency 'web3.swift', '~> 1.6.0'
-  spec.dependency 'tssClientSwift', '4.0.0'
+  spec.dependency 'tss-client-swift', '4.0.0'
   spec.dependency 'curvelib.swift', '~> 1.0.1'
   spec.module_name = "Web3SwiftMpcProvider"
 end
