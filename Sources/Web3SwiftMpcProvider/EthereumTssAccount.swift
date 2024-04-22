@@ -1,7 +1,7 @@
 import BigInt
 import Foundation
 import curveSecp256k1
-import tss_client_swift
+import tssClientSwift
 import web3
 
 enum CustomSigningError: Error {
