@@ -9,15 +9,15 @@ import Foundation
 import mpc_core_kit_swift
 
 public protocol ISigner {
-    func sign( message: Data ) -> Data
+    func sign( message: Data ) throws -> Data
     func schnorrSign(message: Data, publicKey: Data) -> Data
     var publicKey : Data { get }
 }
 
 
 extension MpcCoreKit : ISigner {
-    public func sign(message: Data) -> Data {
-        let data =  self.tssSign(message: message)
+    public func sign(message: Data) throws -> Data {
+        let data = try self.tssSign(message: message)
         return data
     }
     

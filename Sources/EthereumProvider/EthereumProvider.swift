@@ -37,7 +37,7 @@ extension  MpcCoreKit : EthereumAccountProtocol {
 
     
     public func sign(message: Data) throws -> Data {
-        return self.tssSign(message: message)
+        return try self.tssSign(message: message)
     }
     
     /// Signs using provided Data

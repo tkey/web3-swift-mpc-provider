@@ -86,9 +86,9 @@
         "package": "mpc-core-kit-swift",
         "repositoryURL": "https://github.com/tkey/mpc-core-kit-swift",
         "state": {
-          "branch": null,
-          "revision": "7f3b7ef03d71e602182747b8d656cccbb47394b7",
-          "version": "1.0.0-alpha"
+          "branch": "sign-fix",
+          "revision": "d2cf9b8ad927f7d1102148ff1893d953fef3294e",
+          "version": null
         }
       },
       {
