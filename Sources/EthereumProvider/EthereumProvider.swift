@@ -3,6 +3,7 @@ import Foundation
 import curveSecp256k1
 import web3
 import mpc_core_kit_swift
+import tkey
 
 enum CustomSigningError: Error {
     case generalError(error: String = "")
@@ -22,13 +23,21 @@ enum EthereumSignerError: Error {
 
 extension  MpcCoreKit : EthereumAccountProtocol {
     public var address: web3.EthereumAddress {
+        let pubKey = self.getTssPubKey()
+        
+        guard let fullAddress = try? KeyPoint.init(address: pubKey.hexString).getPublicKey(format: .FullAddress) else {
+            return ""
+        }
+        
+        let data = Data(hexString: fullAddress)!
+        
         // try async
-        return EthereumAddress(KeyUtil.generateAddress(from: self.getTssPubKey().suffix(64) ).toChecksumAddress())
+        return EthereumAddress(KeyUtil.generateAddress(from: data.suffix(64)).toChecksumAddress())
     }
 
     
     public func sign(message: Data) throws -> Data {
-        return self.tssSign(message: message)
+        return try self.tssSign(message: message)
     }
     
     /// Signs using provided Data
@@ -40,7 +49,7 @@ extension  MpcCoreKit : EthereumAccountProtocol {
     ///
     /// - Throws: On signing failure
     public func sign(data: Data) throws -> Data {
-        let hash = data.sha3(.keccak256)
+        let hash = try data.sha3(varient: .KECCAK256)
         let signature = try sign(message: hash)
         return signature
     }
