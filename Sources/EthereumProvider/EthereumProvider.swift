@@ -3,7 +3,7 @@ import Foundation
 import curveSecp256k1
 import web3
 import mpc_core_kit_swift
-import tkey_mpc_swift
+import tkey
 
 enum CustomSigningError: Error {
     case generalError(error: String = "")
@@ -49,7 +49,7 @@ extension  MpcCoreKit : EthereumAccountProtocol {
     ///
     /// - Throws: On signing failure
     public func sign(data: Data) throws -> Data {
-        let hash = data.sha3(.keccak256)
+        let hash = try data.sha3(varient: .KECCAK256)
         let signature = try sign(message: hash)
         return signature
     }
