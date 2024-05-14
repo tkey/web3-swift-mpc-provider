@@ -18,7 +18,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/argentlabs/web3.swift", from:"1.6.0"),
-        .package(url: "https://github.com/tkey/mpc-core-kit-swift", .branch("sign-fix")),
+        .package(url: "https://github.com/tkey/mpc-core-kit-swift", .branch("main")),
     ],
     targets: [
         
