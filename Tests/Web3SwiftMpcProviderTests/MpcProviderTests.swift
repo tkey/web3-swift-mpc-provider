@@ -151,18 +151,15 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let data = try  mockLogin2(email: email)
         let token = data
         
-        let keyDetails = try await coreKitInstance.loginWithJwt(verifier: verifier, verifierId: email, idToken: token)
+        let _ = try await coreKitInstance.loginWithJwt(verifier: verifier, verifierId: email, idToken: token)
         
         //
         let provider = MPCEthereumProvider(evmSigner: coreKitInstance )
         let msg = "hello world"
         let result = try provider.sign(message: msg)
-        print(result)
         
         let typedData = try decoder.decode(TypedData.self, from: example1)
-        
-        
         let typedDataResult = try provider.signMessage(message: typedData)
-        print(typedData)
+        print(typedDataResult)
     }
 }
