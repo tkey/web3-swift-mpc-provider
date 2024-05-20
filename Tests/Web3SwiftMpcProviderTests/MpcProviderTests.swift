@@ -158,5 +158,11 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let msg = "hello world"
         let result = try provider.sign(message: msg)
         print(result)
+        
+        let typedData = try decoder.decode(TypedData.self, from: example1)
+        
+        
+        let typedDataResult = try provider.signMessage(message: typedData)
+        print(typedData)
     }
 }
