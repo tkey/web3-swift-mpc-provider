@@ -2,6 +2,13 @@ import BigInt
 import web3
 import Web3SwiftMpcProvider
 import XCTest
+import mpc_core_kit_swift
+import mpcEvmSigner
+
+import MPCEthereumProvider
+
+extension MpcCoreKit : EvmSigner {
+}
 
 final class Web3SwiftMpcProviderTests: XCTestCase {
     let example1 = """
@@ -116,5 +123,43 @@ final class Web3SwiftMpcProviderTests: XCTestCase {
         let params = EthTssAccountParams(publicKey: fullAddress, factorKey: factorKey, tssNonce: Int32(tssNonce), tssShare: tssShare, tssIndex: tssIndex, selectedTag: selected_tag, verifier: verifier, verifierID: verifierId, nodeIndexes: [], tssEndpoints: tssEndpoints, authSigs: sigs)
         let tssAccount = try EthereumTssAccount(params: params)
         let _ = try tssAccount.signMessage(message: typedData)
+    }
+
+    
+    func resetMPC(email: String, verifier: String, clientId: String) async throws {
+        var coreKitInstance = MpcCoreKit(web3AuthClientId: clientId, web3AuthNetwork: .SAPPHIRE_DEVNET, localStorage: MemoryStorage())
+        
+        let data = try  mockLogin2(email: email)
+        let token = data
+        
+        
+        let keyDetails = try await coreKitInstance.loginWithJwt(verifier: verifier, verifierId: email, idToken: token)
+        try await coreKitInstance.resetAccount()
+    }
+    
+    func testMpcProviderSigning() async throws {
+        
+        let email = "testiosEmail004"
+        let verifier = "torus-test-health"
+        let clientId = "torus-test-health"
+        
+        // reset account for testing
+        try await resetMPC(email: email, verifier: verifier, clientId: clientId)
+        
+        
+        // setup mpc
+        let memoryStorage = MemoryStorage()
+        var coreKitInstance = MpcCoreKit( web3AuthClientId: clientId, web3AuthNetwork: .SAPPHIRE_DEVNET, localStorage: memoryStorage)
+        
+        let data = try  mockLogin2(email: email)
+        let token = data
+        
+        let keyDetails = try await coreKitInstance.loginWithJwt(verifier: verifier, verifierId: email, idToken: token)
+        
+        //
+        let provider = MPCEthereumProvider(evmSigner: coreKitInstance )
+        let msg = "hello world"
+        let result = try provider.sign(message: msg)
+        print(result)
     }
 }
