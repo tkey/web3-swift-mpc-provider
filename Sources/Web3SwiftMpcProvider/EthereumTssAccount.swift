@@ -1,8 +1,10 @@
 import BigInt
 import Foundation
-import curveSecp256k1
 import tssClientSwift
 import web3
+#if canImport(curveSecp256k1)
+import curveSecp256k1
+#endif
 
 enum CustomSigningError: Error {
     case generalError(error: String = "")

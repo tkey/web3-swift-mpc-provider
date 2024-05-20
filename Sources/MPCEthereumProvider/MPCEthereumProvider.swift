@@ -7,9 +7,12 @@
 
 import BigInt
 import Foundation
-#ifcanimport
-import curveSecp256k1
 import web3
+
+#if canImport(curveSecp256k1)
+import curveSecp256k1
+#endif
+
 
 public protocol EvmSigner {
     func sign( message: Data ) -> Data
