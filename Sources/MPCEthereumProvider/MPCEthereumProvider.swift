@@ -15,7 +15,7 @@ import curveSecp256k1
 
 
 public protocol EvmSigner {
-    func sign( message: Data ) -> Data
+    func sign( message: Data ) throws -> Data
     var publicKey : Data { get }
 }
 
