@@ -40,7 +40,7 @@ let package = Package(
         .testTarget(
             name: "Web3SwiftMpcProviderTests",
             dependencies: ["Web3SwiftMpcProvider", "MPCEthereumProvider",
-              .product(name: "mpcEvmSigner", package: "mpc-core-kit-swift"),
+              .product(name: "mpc-core-kit-swift", package: "mpc-core-kit-swift"),
               .product(name: "JWTKit", package: "jwt-kit")
             ],
             path: "Tests"),

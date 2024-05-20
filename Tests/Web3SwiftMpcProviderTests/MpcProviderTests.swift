@@ -3,12 +3,9 @@ import web3
 import Web3SwiftMpcProvider
 import XCTest
 import mpc_core_kit_swift
-import mpcEvmSigner
 
 import MPCEthereumProvider
 
-extension MpcCoreKit : EvmSigner {
-}
 
 final class Web3SwiftMpcProviderTests: XCTestCase {
     let example1 = """
