@@ -7,6 +7,7 @@
 
 import BigInt
 import Foundation
+#ifcanimport
 import curveSecp256k1
 import web3
 
